@@ -70,9 +70,7 @@ export async function POST(req: Request) {
     const latestUserMessage =
       [...chatHistory].reverse().find((msg) => msg.role === "user")?.content ?? "";
 
-    const creatorCheckText = `${task}\n${latestUserMessage}`;
-
-    if (isCreatorQuestion(creatorCheckText)) {
+    if (isCreatorQuestion(latestUserMessage)) {
       return new NextResponse(
         buildDirectMarkdownResponse("My creator is Luv Patel, the creator of Debug AI."),
         {
