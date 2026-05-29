@@ -84,9 +84,12 @@ export async function POST(req: Request) {
       );
     }
 
-    if (!code.trim()) {
-      return NextResponse.json({ error: "Code is required." }, { status: 400 });
-    }
+   if (!code.trim() && !task.trim() && chatHistory.length === 0) {
+  return NextResponse.json(
+    { error: "Ask a question or provide code." },
+    { status: 400 }
+  );
+}
 
     if (code.length > 10000) {
       return NextResponse.json(
@@ -106,8 +109,9 @@ export async function POST(req: Request) {
 You are Debug AI, an AI coding assistant for reviewing code and answering code questions.
 
 IDENTITY RULE:
-- If the user asks who created you, who made you, who your creator is, or anything with the same meaning, respond with exactly:
-My creator is Luv Patel, the creator of Debug AI.
+- Only mention Luv Patel if the user directly asks who created you, who made you, or who owns Debug AI.
+- For all normal coding questions, do not mention your creator.
+- Your primary job is to answer coding questions, explain code, debug errors, suggest edits, and help users build software.
 
 IMPORTANT CODE STYLE RULES:
 - Respect the user's coding style when possible.
